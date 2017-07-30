@@ -1,4 +1,3 @@
-import UnidocKeys._
 import FreeGen2._
 import ReleaseTransformations._
 
@@ -108,21 +107,22 @@ lazy val publishSettings = Seq(
       </developer>
     </developers>
   ),
-  releaseCrossBuild := true,
   releasePublishArtifactsAction := PgpKeys.publishSigned.value,
+  releaseCrossBuild := false,
   releaseProcess := Seq[ReleaseStep](
     checkSnapshotDependencies,
     inquireVersions,
     runClean,
-    ReleaseStep(action = Command.process("package", _)),
+    releaseStepCommandAndRemaining("+test"),
     setReleaseVersion,
     commitReleaseVersion,
     tagRelease,
-    ReleaseStep(action = Command.process("publishSigned", _)),
+    releaseStepCommandAndRemaining("+publish"),
     setNextVersion,
     commitNextVersion,
-    ReleaseStep(action = Command.process("sonatypeReleaseAll", _)),
-    pushChanges),
+    pushChanges,
+    releaseStepCommandAndRemaining("sonatypeReleaseAll")
+  ),
   mappings in (Compile, packageSrc) ++= (managedSources in Compile).value pair relativeTo(sourceManaged.value / "main" / "scala")
 )
 
