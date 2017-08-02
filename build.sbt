@@ -28,8 +28,6 @@ lazy val monixVersion         = "2.3.0"
  * for 2.10, so we need sbt-doge to support that. Whee.
  */
 
-enablePlugins(CrossPerProjectPlugin)
-
 lazy val buildSettings = Seq(
   organization := "org.tpolecat",
   licenses ++= Seq(("MIT", url("http://opensource.org/licenses/MIT"))),
@@ -129,6 +127,7 @@ lazy val publishSettings = Seq(
 lazy val doobieSettings = buildSettings ++ commonSettings
 
 lazy val doobie = project.in(file("."))
+  .enablePlugins(CrossPerProjectPlugin)
   .settings(doobieSettings)
   .settings(noPublishSettings)
   .dependsOn(core, core_cats, h2, h2_cats, hikari, hikari_cats, postgres, postgres_cats, specs2, specs2_cats, example, example_cats, bench, bench_cats, scalatest, scalatest_cats, docs, docs_cats, refined, refined_cats)
